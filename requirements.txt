@@ -1,0 +1,4 @@
+dotenv
+openai
+pydantic
+matplotlib==3.9.0
