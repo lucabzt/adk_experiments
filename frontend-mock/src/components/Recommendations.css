@@ -1,0 +1,136 @@
+.recommendations-section {
+  margin-top: 4.5rem;
+  width: 100%;
+}
+
+.recommendations-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.8rem;
+}
+
+.course-card {
+  background-color: var(--bg-primary); /* White background for cards */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease-in-out, box-shadow 0.25s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color); /* Subtle border for cards */
+}
+
+.course-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.course-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background-color: var(--bg-secondary); /* Placeholder bg for image */
+}
+
+.course-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bestseller-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: var(--accent-green); /* Green for bestseller */
+  color: var(--text-on-accent);
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.course-content {
+  padding: 1rem 1.25rem; /* More padding */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.course-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.3rem 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.05rem * 1.4 * 2);
+}
+
+.course-instructor {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+}
+
+.course-rating {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 0.6rem;
+}
+
+.course-rating .rating-score {
+  color: #E4A800; /* Darker gold/orange for rating score */
+  font-weight: bold;
+  margin-right: 0.3rem;
+}
+
+.course-rating .stars {
+  display: flex;
+  margin-right: 0.3rem;
+}
+
+.course-rating .stars svg {
+  margin-right: 1px;
+}
+
+.course-rating .rating-count {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.course-price {
+  margin-top: auto;
+  font-size: 1rem;
+}
+
+.course-price .current-price {
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-right: 0.5rem;
+}
+
+.course-price .original-price {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}

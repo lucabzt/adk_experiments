@@ -1,0 +1,126 @@
+.input-section {
+  margin: 3rem 0 4rem; /* Adjusted margin */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-section-title {
+  font-size: 2.6rem; /* Slightly adjusted */
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.input-section-subtitle {
+  font-size: 1.1rem; /* Slightly adjusted */
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 2.5rem; /* Space before input area */
+  line-height: 1.6;
+}
+
+.input-area-wrapper {
+  width: 100%;
+  max-width: 720px; /* Max width for the whole input area */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* Space between main input and attachment buttons */
+}
+
+.main-input-container {
+  display: flex;
+  align-items: flex-end; /* Align button to bottom if textarea grows tall */
+  width: 100%;
+  background-color: var(--bg-input-field);
+  border: 1px solid var(--border-color-input);
+  border-radius: 12px;
+  padding: 12px 12px 12px 20px; /* More padding left for text */
+  box-shadow: var(--input-shadow);
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.main-input-container:focus-within {
+  background-color: var(--bg-input-field-focus);
+  border-color: var(--border-color-input-focus);
+  box-shadow: var(--input-focus-shadow);
+}
+
+.main-input-container textarea {
+  flex-grow: 1;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 1.1rem; /* Larger font in textarea */
+  line-height: 1.6;
+  resize: none;
+  min-height: 100px; /* Increased min-height */
+  max-height: 250px; /* Max height before scrollbar */
+  overflow-y: auto;
+  padding-right: 10px; /* Space before send button */
+}
+
+.main-input-container textarea::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+.submit-prompt-button {
+  background-color: var(--accent-blue);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px; /* Larger padding */
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Prevent text wrapping */
+  height: fit-content; /* Fit to content height */
+  align-self: flex-end; /* Keep button at bottom */
+}
+
+.submit-prompt-button:hover {
+  background-color: var(--accent-blue-hover);
+}
+
+.submit-prompt-button:disabled {
+  background-color: var(--bg-secondary);
+  color: var(--text-placeholder);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.attachment-actions {
+  display: flex;
+  justify-content: flex-start; /* Align to left */
+  gap: 0.75rem; /* Space between buttons */
+  padding-left: 4px; /* Slight indent */
+}
+
+.attachment-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Space between icon and text */
+  background-color: var(--bg-secondary); /* Light gray background */
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.attachment-button:hover {
+  background-color: var(--accent-blue-hover-light, #e0ePff); /* Very light blue on hover - define this var */
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.attachment-button svg {
+  /* Icon size is already set in SVG component */
+  color: currentColor; /* Inherit color from button text */
+}

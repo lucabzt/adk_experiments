@@ -1,0 +1,79 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light; /* Main scheme set to light */
+  background-color: var(--bg-page); /* Page background */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Custom Properties for Light Theme */
+  --bg-page: #F4F7F9; /* Very light, slightly cool background */
+  --bg-primary: #FFFFFF; /* White for primary content areas like cards */
+  --bg-secondary: #E9ECEF; /* Slightly off-white for subtle distinctions */
+  --bg-input-field: #E1E8ED; /* Darker background for the input field */
+  --bg-input-field-focus: #DDE5EC; /* Slightly darker for input focus */
+
+  --text-primary: #212529; /* Dark gray for main text */
+  --text-secondary: #5A646E; /* Medium gray for secondary text */
+  --text-placeholder: #8A949E; /* Lighter gray for placeholders */
+  --text-on-accent: #FFFFFF; /* White text on accent backgrounds */
+
+  --accent-blue: #007BFF; /* Primary blue accent */
+  --accent-blue-hover: #0056b3;
+  --accent-green: #28A745; /* Green accent */
+  --accent-green-hover: #1e7e34;
+  --accent-star: #FFC107; /* Yellow for stars */
+
+
+  --border-color: #CED4DA; /* Light gray for borders */
+  --border-color-input: #BCC8D2; /* Slightly darker border for input */
+  --border-color-input-focus: var(--accent-blue);
+
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --input-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --input-focus-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Blue focus ring */
+  --accent-blue-hover-light: #e6f2ff; /* Or a similar very light blue */
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
+
+#root {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Simple scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue-hover);
+}

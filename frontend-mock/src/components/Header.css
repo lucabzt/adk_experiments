@@ -1,0 +1,123 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0; /* Adjust vertical padding if #root handles horizontal */
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  background-color: var(--bg-primary); /* Give header a distinct background */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04); /* Subtle shadow for depth */
+  /* If #root doesn't have padding, add horizontal padding here:
+  padding: 0.75rem 2rem;
+  */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Space between logo group and nav links */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.logo-container svg { /* Styling for the logo */
+  /* SVG already has size, this is just an example if needed */
+}
+
+.app-name {
+  font-size: 1.7rem; /* Slightly smaller to accommodate logo */
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1; /* Align better with logo */
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5rem; /* Space between nav links */
+}
+
+.nav-link {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.5rem 0; /* Padding for larger click area and underline space */
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent-blue);
+}
+
+.nav-link.active {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; /* Align with header border */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--accent-blue);
+  border-radius: 2px;
+}
+/* This rule needs to be applied because the header now has its own background */
+/* Adjust if #root already has padding */
+.app-header {
+  /* ... other styles ... */
+  padding-left: 2rem; /* Assuming #root has 2rem padding */
+  padding-right: 2rem; /* Assuming #root has 2rem padding */
+  margin-left: -2rem; /* Counteract #root padding to make header full width */
+  margin-right: -2rem; /* Counteract #root padding to make header full width */
+  width: calc(100% + 4rem); /* Adjust width to be full viewport */
+  max-width: none; /* Override #root's max-width for the header */
+}
+
+
+/* The rest of .auth-nav and .auth-button styles can remain the same from previous version */
+.auth-nav {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.auth-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.auth-button.primary {
+  background-color: var(--accent-blue);
+  color: var(--text-on-accent);
+  border-color: var(--accent-blue);
+}
+
+.auth-button.primary:hover {
+  background-color: var(--accent-blue-hover);
+  border-color: var(--accent-blue-hover);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.auth-button.secondary {
+  background-color: transparent;
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+}
+
+.auth-button.secondary:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+  color: var(--accent-blue-hover);
+}
