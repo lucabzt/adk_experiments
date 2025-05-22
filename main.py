@@ -19,16 +19,21 @@ class Visualization(BaseModel):
     description: str
 
 
+prompt = input("What do you want to visualize?\n")
+print("Okay, cooking this up for you...")
+
 # PROMPT OPENAI
 response = client.responses.parse(
-            model="gpt-4o-mini",
+            model="o4-mini",
             text_format=Visualization,
             input=[
                 {"role": "system", "content": vis_prompt},
-                {"role": "user", "content": """
-                    Please visualize the profit graph of a call option
-                """},
+                {"role": "user", "content": prompt},
             ]
 )
 
-print(response.output_parsed.model_dump())
+print(response.output_parsed.model_dump()['code'])
+
+exec(response.output_parsed.model_dump()['code'])
+
+print(response.output_parsed.model_dump()['description'])
