@@ -13,6 +13,12 @@
 # limitations under the License.
 
 import os
+from google.genai import types
+
+
+def create_text_query(query: str) -> types.Content:
+    """ Takes a string and returns a user query that can be sent to an agent """
+    return types.Content(role="user", parts=[types.Part(text=query)])
 
 
 def load_instruction_from_file(
