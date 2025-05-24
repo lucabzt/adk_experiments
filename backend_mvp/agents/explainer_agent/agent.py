@@ -5,7 +5,7 @@ runner from adk and calls to visualizer agent into a simple run() method
 from google.adk.agents import LlmAgent
 from google.adk.runners import Runner
 
-from ..utils import load_instruction_from_file
+from ..utils import load_instruction_from_file   
 
 
 class ExplainerAgent:
@@ -18,7 +18,7 @@ class ExplainerAgent:
             instruction=load_instruction_from_file("explainer_agent/instructions.txt"),
         )
 
-        # Create necessary
+        # Assign attributes
         self.app_name = app_name
         self.session_service = session_service
         self.runner = Runner(
@@ -36,14 +36,14 @@ class ExplainerAgent:
         :param debug: if true the method will print auxiliary outputs (all events)
         :return: the final response of the planner agent
         """
-        # Key Concept: run_async executes the agent logic and yields Events.
-        # We iterate through events to find the final answer.
+        # Key Concept: run_async executes the agent logic and yields Events
+        # We iterate through events to find the final answer
         async for event in self.runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
-            # You can set debug true to see *all* events during execution
+            # You can set debug true to see all events during execution
             if debug:
                 print(f"  [Event] Author: {event.author}, Type: {type(event).__name__}, Final: {event.is_final_response()}, Content: {event.content}")
 
-            # is_final_response() marks the concluding message for the turn.
+            # is_final_response() marks the concluding message for the turn
             if event.is_final_response():
                 if event.content and event.content.parts:
                     # Assuming text response in the first part

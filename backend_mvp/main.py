@@ -1,86 +1,94 @@
-import asyncio
 import json
-import uuid
+
+import uvicorn
 from dotenv import load_dotenv
+from fastapi import FastAPI
 from google.adk.sessions import InMemorySessionService
+from pydantic import BaseModel, Field
 
 from backend_mvp.agents.explainer_agent.agent import ExplainerAgent
 from backend_mvp.agents.planner_agent import PlannerAgent
 from backend_mvp.agents.utils import create_text_query
 
-
+app = FastAPI()
 load_dotenv()
 
 APP_NAME = "TeachAI"
 session_service = InMemorySessionService()
 
-# We will get this from the frontend over the rest endpoint
-USER_ID = str(uuid.uuid4())
+planner_agent = PlannerAgent(APP_NAME, session_service)
+explainer_agent = ExplainerAgent(APP_NAME, session_service)
 
 
-def frontend():
-    """ Mock frontend functionality """
-    learning_goal = input("What do you want to learn?\n")
-    time = int(input("How many hours do you want to invest?\n"))
-    query = create_text_query(f"""
-            Question (System): What do you want to learn?
-            Answer (User): \n{learning_goal}
-            Question (System): How many hours do you want to invest?
-            Answer (User): {time}
-        """)
-    return query
+class CourseDetails(BaseModel):
+    query: str = Field(description="The text query from the user")
+    time: int = Field(description="The time the user wants to invest in hours")
 
 
-async def get_new_session_id(user_id):
+@app.get("/")
+def root():
+    """ Default endpoint to check server reachability """
+    return {"status": "running"}
+
+
+@app.post("/create_session/{user_id}")
+async def create_session(user_id: str):
     """ Get a new memory session for the given user id """
     session = await session_service.create_session(
         app_name=APP_NAME,
         user_id=user_id,
-        state={}  # Initial state if needed
+        state={}
     )
-    return session.id
+    return {"session_id": session.id}
 
 
-async def main_async():
-
-    # Get sessions
-    planner_session = await get_new_session_id(USER_ID)
-    explainer_session = await get_new_session_id(USER_ID)
-
-    # Create agents
-    planner_agent = PlannerAgent(APP_NAME, session_service)
-    explainer_agent = ExplainerAgent(APP_NAME, session_service)
-
+@app.post("/create_course/{user_id}/{session_id}")
+async def create_course(user_id: str, session_id: str, course_details: CourseDetails):
+    """ Main endpoint, creating a new course from the given course details """
+    content = create_text_query(f"""
+                Question (System): What do you want to learn?
+                Answer (User): \n{course_details.query}
+                Question (System): How many hours do you want to invest?
+                Answer (User): {course_details.time}
+            """)
     # Query the planner agent (returns a dict)
-    response = await planner_agent.run(
-        user_id=USER_ID,
-        session_id=planner_session,
-        content=frontend(),
+    response_planner = await planner_agent.run(
+        user_id=user_id,
+        session_id=session_id,
+        content=content,
         debug=False
     )
-    #print(f"Response from planner Agent: \n{json.dumps(response, indent=2)}")
 
+    response = {
+        "status": "success",
+        "chapters": []
+    }
     # TODO add error handling for status error
-
-    for idx, topic in enumerate(response["chapters"]):
+    # Enumerate chapters from planner agent and give to explainer agent
+    for idx, topic in enumerate(response_planner["chapters"]):
         pretty_topic = f"""
-            Chapter {idx + 1}:
-            Caption: {topic['caption']}
-            Content: \n{json.dumps(topic['content'], indent=2)}
-        """
-
-        print(pretty_topic)
+                Chapter {idx + 1}:
+                Caption: {topic['caption']}
+                Content: \n{json.dumps(topic['content'], indent=2)}
+            """
 
         response_explainer = await explainer_agent.run(
-            user_id=USER_ID,
-            session_id=explainer_session,
+            user_id=user_id,
+            session_id=session_id,
             content=create_text_query(pretty_topic),
         )
 
-        print("---------- EXPLANATION ----------")
-        print(response_explainer['explanation'])
-        with open(f"markdown_test/{idx}_{topic['caption']}.md", "w", encoding="utf-8") as file:
-            file.write(response_explainer['explanation'])
+        chapter = {
+            "index": idx + 1,
+            "caption": topic['caption'],
+            "summary": json.dumps(topic['content'], indent=2),
+            "content": response_explainer['explanation'],
+        }
+
+        response["chapters"].append(chapter)
+
+    return response
+
 
 if __name__ == "__main__":
-    asyncio.run(main_async())
+    uvicorn.run(app, host="0.0.0.0", port=8000)
