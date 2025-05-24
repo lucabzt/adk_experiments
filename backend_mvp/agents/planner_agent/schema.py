@@ -1,5 +1,5 @@
 """
-This file defines the adk planner agent as well as its output format
+This file defines the output format of the planner agent.
 """
 from typing import List, Optional
 from pydantic import BaseModel, Field

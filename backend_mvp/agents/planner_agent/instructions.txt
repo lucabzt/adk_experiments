@@ -48,6 +48,7 @@ You are an AI Learning Path Planner. Create structured learning paths that progr
   },
   "required": ["chapters"]
 }
+```
 
 Example:
 Input: "I want to learn Python in 2 hours"
