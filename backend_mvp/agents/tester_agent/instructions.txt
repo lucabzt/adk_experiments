@@ -58,6 +58,7 @@ Example to clarify output schema:
       "answer_c": "Paris",
       "answer_d": "Rome"
       "correct_answer": "c"
+      "explanation": "Paris has been the capital of France since the late 10th Century"
     },
     {
       "question": "Which planet is known as the 'Red Planet'?",
@@ -66,6 +67,7 @@ Example to clarify output schema:
       "answer_c": "Jupiter",
       "answer_d": "Venus"
       "correct_answer": "b"
+      "explanation": "Because of its shiny red surface, Mars is called the 'Red Planet'"
     }
   ]
 }

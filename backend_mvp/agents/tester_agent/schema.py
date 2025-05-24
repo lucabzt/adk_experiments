@@ -14,6 +14,7 @@ class McQuestion(BaseModel):
     correct_answer: Literal["a", "b", "c", "d"] = Field(
         description="The letter of the correct answer (must be a, b, c, or d)"
     )
+    explanation: str = Field(description="Very short explanation why the answer is correct")
 
 
 class Test(BaseModel):
