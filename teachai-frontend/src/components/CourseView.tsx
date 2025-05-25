@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { BookOpen, ChevronLeft, ChevronRight, Menu, Home, CheckCircle } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Menu, Home, CheckCircle, HelpCircle } from 'lucide-react';
 import { Course, Chapter } from '../App';
+import QuizModal from './QuizModal';
 
 interface CourseViewProps {
   course: Course;
@@ -12,6 +13,7 @@ const CourseView: React.FC<CourseViewProps> = ({ course, onBackToHome }) => {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [completedChapters, setCompletedChapters] = useState<Set<number>>(new Set());
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
 
   const currentChapter = course.chapters[currentChapterIndex];
 
@@ -34,6 +36,14 @@ const CourseView: React.FC<CourseViewProps> = ({ course, onBackToHome }) => {
 
   const markAsComplete = () => {
     setCompletedChapters(prev => new Set(prev).add(currentChapterIndex));
+  };
+
+  const openQuizModal = () => {
+    setIsQuizModalOpen(true);
+  };
+
+  const closeQuizModal = () => {
+    setIsQuizModalOpen(false);
   };
 
   return (
@@ -76,6 +86,12 @@ const CourseView: React.FC<CourseViewProps> = ({ course, onBackToHome }) => {
                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                     {chapter.summary}
                   </p>
+                  {/* Quiz indicator */}
+                  {chapter.mc_questions && chapter.mc_questions.length > 0 && (
+                    <div className="text-xs text-blue-600 mt-1">
+                      📝 {chapter.mc_questions.length} quiz questions
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -169,9 +185,38 @@ const CourseView: React.FC<CourseViewProps> = ({ course, onBackToHome }) => {
                   {currentChapter.content}
                 </ReactMarkdown>
               </div>
+
+              {/* Take Quiz Button */}
+              {currentChapter.mc_questions && currentChapter.mc_questions.length > 0 && (
+                <div className="mt-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-center">
+                  <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center justify-center">
+                    <HelpCircle className="h-6 w-6 text-blue-600 mr-2" />
+                    Ready to Test Your Knowledge?
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Take the quiz to test your understanding of this chapter ({currentChapter.mc_questions.length} questions)
+                  </p>
+                  <button
+                    onClick={openQuizModal}
+                    className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center mx-auto"
+                  >
+                    <HelpCircle className="h-5 w-5 mr-2" />
+                    Take Quiz
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
+
+        {/* Quiz Modal */}
+        <QuizModal
+          isOpen={isQuizModalOpen}
+          onClose={closeQuizModal}
+          mcQuestions={currentChapter.mc_questions || []}
+          chapterIndex={currentChapterIndex}
+          chapterTitle={currentChapter.caption}
+        />
 
         {/* Navigation Footer */}
         <div className="bg-white border-t border-gray-200 px-6 py-4">

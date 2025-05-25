@@ -13,7 +13,7 @@ class ExplainerAgent:
         # Create the planner agent
         explainer_agent = LlmAgent(
             name="explainer_agent",
-            model="gemini-2.0-flash",
+            model="gemini-2.5-flash-preview-05-20",
             description="Agent for creating engaging and simple explanations for complex topics",
             instruction=load_instruction_from_file("explainer_agent/instructions.txt"),
         )
@@ -52,11 +52,13 @@ class ExplainerAgent:
                         "explanation": event.content.parts[0].text
                     }
                 elif event.actions and event.actions.escalate:  # Handle potential errors/escalations
+                    print("ERROR 1 IN EXPLAINER AGENT, PLEASE HANDLE")
                     return {
                         "status": "error",
                         "message": f"Agent escalated: {event.error_message or 'No specific message.'}"
                     }
 
+        print("ERROR 2 IN EXPLAINER AGENT, PLEASE HANDLE")
         return {
             "status": "error",
             "message": "agent did not give a final respond. unknown error occurred",

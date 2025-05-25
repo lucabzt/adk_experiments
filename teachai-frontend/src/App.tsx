@@ -5,11 +5,22 @@ import LoadingScreen from './components/LoadingScreen';
 import CourseView from './components/CourseView';
 import './App.css';
 
+export interface McQuestion {
+  question: string;
+  answer_a: string;
+  answer_b: string;
+  answer_c: string;
+  answer_d: string;
+  correct_answer: 'a' | 'b' | 'c' | 'd';
+  explanation: string;
+}
+
 export interface Chapter {
   index: number;
   caption: string;
   summary: string;
   content: string;
+  mc_questions: McQuestion[];
 }
 
 export interface Course {

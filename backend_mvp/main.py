@@ -13,20 +13,21 @@ from backend_mvp.agents.tester_agent.agent import TesterAgent
 from backend_mvp.agents.utils import create_text_query
 
 app = FastAPI()
-# --- CORS Configuration ---
+
+# --- CORS Configuration (Development) ---
 origins = [
-    "http://localhost:3000",  # Assuming your React app runs on port 3000
-    # Add any other origins if necessary
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 # --- End CORS Configuration ---
+
 load_dotenv()
 
 APP_NAME = "TeachAI"
@@ -35,6 +36,7 @@ session_service = InMemorySessionService()
 planner_agent = PlannerAgent(APP_NAME, session_service)
 explainer_agent = ExplainerAgent(APP_NAME, session_service)
 tester_agent = TesterAgent(APP_NAME, session_service)
+
 
 # Pydantic model to specify json format for post request (FastAPI)
 class CourseDetails(BaseModel):
