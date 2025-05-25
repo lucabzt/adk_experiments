@@ -1,8 +1,9 @@
 import json
+from typing import Optional
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from google.adk.sessions import InMemorySessionService
 from pydantic import BaseModel, Field
@@ -10,7 +11,7 @@ from pydantic import BaseModel, Field
 from backend_mvp.agents.explainer_agent.agent import ExplainerAgent
 from backend_mvp.agents.planner_agent import PlannerAgent
 from backend_mvp.agents.tester_agent.agent import TesterAgent
-from backend_mvp.agents.utils import create_text_query
+from backend_mvp.agents.utils import create_text_query, create_doc_query
 
 app = FastAPI()
 
@@ -38,12 +39,6 @@ explainer_agent = ExplainerAgent(APP_NAME, session_service)
 tester_agent = TesterAgent(APP_NAME, session_service)
 
 
-# Pydantic model to specify json format for post request (FastAPI)
-class CourseDetails(BaseModel):
-    query: str = Field(description="The text query from the user")
-    time: int = Field(description="The time the user wants to invest in hours")
-
-
 @app.get("/")
 def root():
     """ Default endpoint to check server reachability """
@@ -62,14 +57,38 @@ async def create_session(user_id: str):
 
 
 @app.post("/create_course/{user_id}/{session_id}")
-async def create_course(user_id: str, session_id: str, course_details: CourseDetails):
-    """ Main endpoint, creating a new course from the given course details """
-    content = create_text_query(f"""
+async def create_course(
+        user_id: str,
+        session_id: str,
+        query: str = Form(..., description="The text query from the user"),
+        time: int = Form(..., description="The time the user wants to invest in hours"),
+        file: Optional[UploadFile] = File(None, description="Optional document to extract content from")
+):
+    """
+    Main endpoint for creating a new course from user query and documents.
+
+    Args:
+        user_id: User identifier
+        session_id: Session identifier
+        query: User's learning query/goal
+        time: Time user wants to invest (in hours)
+        file: Optional file to extract additional content from
+
+    Returns:
+        dict: Course structure with chapters and content
+    """
+    full_query = f"""
                 Question (System): What do you want to learn?
-                Answer (User): \n{course_details.query}
+                Answer (User): \n{query}
                 Question (System): How many hours do you want to invest?
-                Answer (User): {course_details.time}
-            """)
+                Answer (User): {time}
+            """
+
+    if file:
+        content = create_doc_query(full_query, file)
+    else:
+        content = create_text_query(full_query)
+
     # Query the planner agent (returns a dict)
     response_planner = await planner_agent.run(
         user_id=user_id,
@@ -95,10 +114,6 @@ async def create_course(user_id: str, session_id: str, course_details: CourseDet
                 Note by Planner Agent: {json.dumps(topic['note'], indent=2)}
             """
 
-        print(f" !!!! DEBUG OUTPUT START")
-        print(pretty_topic)
-        print(f" !!!! DEBUG OUTPUT END")
-
         # Get response from explainer agent
         response_explainer = await explainer_agent.run(
             user_id=user_id,
@@ -112,12 +127,14 @@ async def create_course(user_id: str, session_id: str, course_details: CourseDet
                 Full Content: \n{json.dumps(response_explainer['explanation'], indent=2)}
         """
 
+        # Get response from explainer agent
         response_tester = await tester_agent.run(
             user_id=user_id,
             session_id=session_id,
             content=create_text_query(pretty_chapter),
         )
 
+        # Build up response
         chapter = {
             "index": idx + 1,
             "caption": topic['caption'],
